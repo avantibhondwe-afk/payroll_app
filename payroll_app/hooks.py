@@ -257,4 +257,9 @@ fixtures = [
     {"dt": "Client Script", "filters": [["module", "in", ["Payroll App"]]]},
     {"dt": "Server Script", "filters": [["module", "in", ["Payroll App"]]]},
     {"dt": "Print Format", "filters": [["module", "in", ["Payroll App"]]]},
+    {"dt": "Workflow", "filters": [["document_type", "in", ["Leave Request Pro"]]]},
+    {"dt": "Notification", "filters": [["document_type", "in", ["Leave Request Pro"]]]},
+    {"dt": "Workflow State"},
+    {"dt": "Workflow Action Master"},
+    {"dt": "Role", "filters": [["name", "in", ["Leave Manager", "Leave HR", "Leave CEO"]]]},
 ]

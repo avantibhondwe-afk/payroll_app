@@ -1,0 +1,37 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-12 23:52:59.501584",
+  "name": "Approve",
+  "workflow_action_name": "Approve"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-12 23:52:59.506747",
+  "name": "Review",
+  "workflow_action_name": "Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 00:24:18.131180",
+  "name": "Submit for Approval",
+  "workflow_action_name": "Submit for Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 00:36:17.666477",
+  "name": "Escalate",
+  "workflow_action_name": "Escalate"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-12 23:52:59.505112",
+  "name": "Reject",
+  "workflow_action_name": "Reject"
+ }
+]
