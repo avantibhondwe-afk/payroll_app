@@ -250,3 +250,11 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Fixtures
+fixtures = [
+    {"dt": "DocType", "filters": [["module", "in", ["Payroll App"]]]},
+    {"dt": "Client Script", "filters": [["module", "in", ["Payroll App"]]]},
+    {"dt": "Server Script", "filters": [["module", "in", ["Payroll App"]]]},
+    {"dt": "Print Format", "filters": [["module", "in", ["Payroll App"]]]},
+]
