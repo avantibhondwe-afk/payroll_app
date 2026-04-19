@@ -48,18 +48,18 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
-  "modified": "2026-04-19 00:21:36.030721",
-  "name": "Draft",
+  "modified": "2026-04-19 00:22:04.275004",
+  "name": "Pending Manager",
   "style": "",
-  "workflow_state_name": "Draft"
+  "workflow_state_name": "Pending Manager"
  },
  {
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
-  "modified": "2026-04-19 00:22:04.275004",
-  "name": "Pending Manager",
+  "modified": "2026-04-19 00:21:36.030721",
+  "name": "Draft",
   "style": "",
-  "workflow_state_name": "Pending Manager"
+  "workflow_state_name": "Draft"
  }
 ]
