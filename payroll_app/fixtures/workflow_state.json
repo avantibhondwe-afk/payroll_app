@@ -11,15 +11,6 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
-  "icon": "remove",
-  "modified": "2026-04-12 23:52:59.466124",
-  "name": "Rejected",
-  "style": "Danger",
-  "workflow_state_name": "Rejected"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
   "icon": "",
   "modified": "2026-04-19 00:22:35.797295",
   "name": "Pending HR",
@@ -43,6 +34,15 @@
   "name": "Approved",
   "style": "Success",
   "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2026-04-12 23:52:59.466124",
+  "name": "Rejected",
+  "style": "Danger",
+  "workflow_state_name": "Rejected"
  },
  {
   "docstatus": 0,
