@@ -30,6 +30,41 @@
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 19:20:18.215885",
+  "name": "Schedule Kickoff",
+  "workflow_action_name": "Schedule Kickoff"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 19:21:13.722724",
+  "name": "Confirm Kickoff",
+  "workflow_action_name": "Confirm Kickoff"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 19:21:49.560180",
+  "name": "Mark Complete",
+  "workflow_action_name": "Mark Complete"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 19:22:17.955383",
+  "name": "Put on Hold",
+  "workflow_action_name": "Put on Hold"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 19:22:47.101227",
+  "name": "Resume",
+  "workflow_action_name": "Resume"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
   "modified": "2026-04-12 23:52:59.505112",
   "name": "Reject",
   "workflow_action_name": "Reject"

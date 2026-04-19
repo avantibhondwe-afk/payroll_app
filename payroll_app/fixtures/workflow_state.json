@@ -29,6 +29,33 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 19:18:10.626137",
+  "name": "Kickoff Scheduled",
+  "style": "",
+  "workflow_state_name": "Kickoff Scheduled"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 19:18:40.081049",
+  "name": "In Progress",
+  "style": "",
+  "workflow_state_name": "In Progress"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 19:19:03.505269",
+  "name": "On Hold",
+  "style": "",
+  "workflow_state_name": "On Hold"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
   "icon": "ok-sign",
   "modified": "2026-04-12 23:52:59.463542",
   "name": "Approved",
@@ -52,6 +79,15 @@
   "name": "Pending Manager",
   "style": "",
   "workflow_state_name": "Pending Manager"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 19:19:22.236419",
+  "name": "Completed",
+  "style": "",
+  "workflow_state_name": "Completed"
  },
  {
   "docstatus": 0,
