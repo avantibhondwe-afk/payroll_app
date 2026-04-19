@@ -65,6 +65,27 @@
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 22:55:38.552229",
+  "name": "Submit for Review",
+  "workflow_action_name": "Submit for Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 22:56:10.114606",
+  "name": "Share with Employee",
+  "workflow_action_name": "Share with Employee"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-19 22:56:31.296639",
+  "name": "Close Review",
+  "workflow_action_name": "Close Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
   "modified": "2026-04-12 23:52:59.505112",
   "name": "Reject",
   "workflow_action_name": "Reject"

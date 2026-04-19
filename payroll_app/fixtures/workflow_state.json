@@ -56,6 +56,33 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 22:54:05.996829",
+  "name": "Under Review",
+  "style": "",
+  "workflow_state_name": "Under Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 22:54:35.755759",
+  "name": "Acknowledged",
+  "style": "",
+  "workflow_state_name": "Acknowledged"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 22:54:53.397926",
+  "name": "Closed",
+  "style": "",
+  "workflow_state_name": "Closed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
   "icon": "ok-sign",
   "modified": "2026-04-12 23:52:59.463542",
   "name": "Approved",
