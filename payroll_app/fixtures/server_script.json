@@ -112,5 +112,43 @@
   "reference_doctype": null,
   "script": "from frappe.utils import nowdate\r\nimport datetime\r\n\r\ntoday = datetime.datetime.now()\r\n\r\n# Only run on 1st of January, April, July, October\r\nif today.day != 1 or today.month not in [1, 4, 7, 10]:\r\n    pass\r\nelse:\r\n    # Determine quarter\r\n    quarter_map = {1: \"Q1\", 4: \"Q2\", 7: \"Q3\", 10: \"Q4\"}\r\n    quarter = quarter_map[today.month]\r\n    year = today.year\r\n\r\n    # Get all active employees\r\n    employees = frappe.get_all(\r\n        \"Employee\",\r\n        filters={\"status\": \"Active\"},\r\n        fields=[\"name\", \"employee_name\", \"department\", \"reports_to\"]\r\n    )\r\n\r\n    created = 0\r\n    for emp in employees:\r\n        # Check if review already exists\r\n        existing = frappe.db.exists(\"Performance Review\", {\r\n            \"employee\": emp.name,\r\n            \"review_period\": quarter,\r\n            \"review_year\": year\r\n        })\r\n\r\n        if not existing:\r\n            doc = frappe.new_doc(\"Performance Review\")\r\n            doc.employee = emp.name\r\n            doc.review_period = quarter\r\n            doc.review_year = year\r\n            doc.department = emp.department\r\n            doc.final_status = \"Draft\"\r\n            doc.insert(ignore_permissions=True)\r\n            created += 1\r\n\r\n    frappe.db.commit()\r\n\r\n    # Send email to all managers\r\n    managers = frappe.get_all(\r\n        \"User\",\r\n        filters={\"role_profile_name\": \"Appraisal Manager\"},\r\n        fields=[\"email\", \"full_name\"]\r\n    )\r\n\r\n    for manager in managers:\r\n        if manager.email:\r\n            frappe.sendmail(\r\n                recipients=[manager.email],\r\n                subject=f\"{quarter} {year} Performance Reviews Now Open\",\r\n                message=f\"\"\"Dear {manager.full_name},\r\n\r\nThe {quarter} {year} performance reviews are now open for scoring.\r\n\r\n{created} review records have been created for your team.\r\n\r\nPlease log in to ERPNext and complete the KPI scoring for your team members.\r\n\r\nBest Regards,\r\nHR Team - Atrina Technologies\r\n\"\"\"\r\n            )\r\n\r\nfrappe.logger().info(f\"Quarterly reviews created: {created}\")",
   "script_type": "Scheduler Event"
+ },
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Save",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2026-05-02 12:57:09.887940",
+  "module": "Payroll App",
+  "name": "Generate Payroll Employees",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "Monthly Payroll Run",
+  "script": "# Only auto-generate if employee_details is empty\r\nif not doc.employee_details:\r\n    # Validate attendance is finalised\r\n    if not doc.attendance_finalised:\r\n        frappe.throw(\"Please finalise attendance before generating payroll.\", title=\"Attendance Not Finalised\")\r\n\r\n    # Get all active employees\r\n    employees = frappe.get_all(\r\n        \"Employee\",\r\n        filters={\"status\": \"Active\"},\r\n        fields=[\"name\", \"employee_name\", \"department\"]\r\n    )\r\n\r\n    total_net = 0\r\n    for emp in employees:\r\n        # Basic salary assumption - in real world fetch from Salary Structure\r\n        basic = 30000\r\n        hra = basic * 0.4\r\n        pf = basic * 0.12\r\n\r\n        # Simulate attendance - present 26 days, absent 0, lwp 0\r\n        present_days = 26\r\n        absent_days = 0\r\n        lwp_days = 0\r\n\r\n        # LWP deduction\r\n        per_day = basic / 26\r\n        lwp_deduction = per_day * lwp_days\r\n\r\n        # Net payable\r\n        net_payable = basic + hra - pf - lwp_deduction\r\n        total_net += net_payable\r\n\r\n        doc.append(\"employee_details\", {\r\n            \"employee\": emp.name,\r\n            \"employee_name\": emp.employee_name,\r\n            \"department\": emp.department,\r\n            \"present_days\": present_days,\r\n            \"absent_days\": absent_days,\r\n            \"lwp_days\": lwp_days,\r\n            \"basic\": basic,\r\n            \"hra\": hra,\r\n            \"pf_deduction\": pf,\r\n            \"lwp_deduction\": lwp_deduction,\r\n            \"net_payable\": net_payable,\r\n            \"status\": \"Pending\"\r\n        })\r\n\r\n    doc.total_employees = len(employees)\r\n    doc.total_net_payable = total_net",
+  "script_type": "DocType Event"
+ },
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Insert",
+  "enable_rate_limit": 0,
+  "event_frequency": "Daily",
+  "modified": "2026-05-02 13:07:37.137251",
+  "module": "Payroll App",
+  "name": "Auto Initiate Payroll",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": null,
+  "script": "from frappe.utils import nowdate\r\nimport datetime\r\n\r\ntoday = datetime.datetime.now()\r\n\r\n# Only run on 25th of every month\r\nif today.day != 25:\r\n    pass\r\nelse:\r\n    month_names = {\r\n        1: \"January\", 2: \"February\", 3: \"March\", 4: \"April\",\r\n        5: \"May\", 6: \"June\", 7: \"July\", 8: \"August\",\r\n        9: \"September\", 10: \"October\", 11: \"November\", 12: \"December\"\r\n    }\r\n    \r\n    month = month_names[today.month]\r\n    year = today.year\r\n\r\n    # Check if payroll run already exists for this month\r\n    existing = frappe.db.exists(\"Monthly Payroll Run\", {\r\n        \"month\": month,\r\n        \"year\": year\r\n    })\r\n\r\n    if not existing:\r\n        # Create new payroll run\r\n        doc = frappe.new_doc(\"Monthly Payroll Run\")\r\n        doc.month = month\r\n        doc.year = year\r\n        doc.status = \"Draft\"\r\n        doc.attendance_finalised = 0\r\n        doc.insert(ignore_permissions=True)\r\n        frappe.db.commit()\r\n\r\n        # Notify HR Manager\r\n        hr_users = frappe.get_all(\r\n            \"Has Role\",\r\n            filters={\"role\": \"HR Manager\", \"parenttype\": \"User\"},\r\n            fields=[\"parent\"]\r\n        )\r\n\r\n        for user in hr_users:\r\n            email = frappe.db.get_value(\"User\", user.parent, \"email\")\r\n            if email:\r\n                frappe.sendmail(\r\n                    recipients=[email],\r\n                    subject=f\"Payroll Run Initiated - {month} {year}\",\r\n                    message=f\"\"\"Dear HR Manager,\r\n\r\nThe monthly payroll run for {month} {year} has been automatically initiated.\r\n\r\nPlease finalise attendance and generate the employee payroll list.\r\n\r\nBest Regards,\r\nAtrina Technologies\r\n\"\"\"\r\n                )\r\n\r\n    frappe.logger().info(f\"Auto payroll check completed for {month} {year}\")",
+  "script_type": "Scheduler Event"
  }
 ]

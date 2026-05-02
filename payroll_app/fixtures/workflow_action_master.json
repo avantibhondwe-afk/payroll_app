@@ -2,13 +2,6 @@
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
-  "modified": "2026-04-12 23:52:59.501584",
-  "name": "Approve",
-  "workflow_action_name": "Approve"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow Action Master",
   "modified": "2026-04-12 23:52:59.506747",
   "name": "Review",
   "workflow_action_name": "Review"
@@ -82,6 +75,20 @@
   "modified": "2026-04-19 22:56:31.296639",
   "name": "Close Review",
   "workflow_action_name": "Close Review"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-05-02 12:49:53.533784",
+  "name": "Submit for HR Approval",
+  "workflow_action_name": "Submit for HR Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2026-04-12 23:52:59.501584",
+  "name": "Approve",
+  "workflow_action_name": "Approve"
  },
  {
   "docstatus": 0,

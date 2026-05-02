@@ -12,28 +12,10 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
-  "modified": "2026-04-19 00:22:35.797295",
-  "name": "Pending HR",
-  "style": "",
-  "workflow_state_name": "Pending HR"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
-  "icon": "",
   "modified": "2026-04-19 00:23:28.965473",
   "name": "Escalated",
   "style": "",
   "workflow_state_name": "Escalated"
- },
- {
-  "docstatus": 0,
-  "doctype": "Workflow State",
-  "icon": "",
-  "modified": "2026-04-19 19:18:10.626137",
-  "name": "Kickoff Scheduled",
-  "style": "",
-  "workflow_state_name": "Kickoff Scheduled"
  },
  {
   "docstatus": 0,
@@ -83,11 +65,20 @@
  {
   "docstatus": 0,
   "doctype": "Workflow State",
-  "icon": "ok-sign",
-  "modified": "2026-04-12 23:52:59.463542",
-  "name": "Approved",
-  "style": "Success",
-  "workflow_state_name": "Approved"
+  "icon": "",
+  "modified": "2026-05-02 12:47:17.312131",
+  "name": "Pending HR Approval",
+  "style": "",
+  "workflow_state_name": "Pending HR Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-05-02 12:48:27.188938",
+  "name": "Pending CEO Approval",
+  "style": "",
+  "workflow_state_name": "Pending CEO Approval"
  },
  {
   "docstatus": 0,
@@ -111,10 +102,46 @@
   "docstatus": 0,
   "doctype": "Workflow State",
   "icon": "",
+  "modified": "2026-04-19 19:18:10.626137",
+  "name": "Kickoff Scheduled",
+  "style": "",
+  "workflow_state_name": "Kickoff Scheduled"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
   "modified": "2026-04-19 19:19:22.236419",
   "name": "Completed",
   "style": "",
   "workflow_state_name": "Completed"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-05-02 12:47:50.207807",
+  "name": "Pending Finance Approval",
+  "style": "",
+  "workflow_state_name": "Pending Finance Approval"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2026-04-12 23:52:59.463542",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "",
+  "modified": "2026-04-19 00:22:35.797295",
+  "name": "Pending HR",
+  "style": "",
+  "workflow_state_name": "Pending HR"
  },
  {
   "docstatus": 0,
