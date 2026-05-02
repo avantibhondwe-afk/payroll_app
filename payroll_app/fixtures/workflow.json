@@ -423,7 +423,7 @@
   "document_type": "Monthly Payroll Run",
   "enable_action_confirmation": 0,
   "is_active": 1,
-  "modified": "2026-05-02 12:55:23.127386",
+  "modified": "2026-05-02 15:22:31.001226",
   "name": "Payroll Approval Workflow",
   "override_status": 0,
   "send_email_alert": 1,
@@ -467,7 +467,7 @@
     "send_email": 1,
     "state": "Pending Finance Approval",
     "update_field": "status",
-    "update_value": "Pending HR Approval",
+    "update_value": "Pending Finance Approval",
     "workflow_builder_id": null
    },
    {
