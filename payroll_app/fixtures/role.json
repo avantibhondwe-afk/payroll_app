@@ -102,5 +102,31 @@
   "restrict_to_domain": null,
   "role_name": "Appraisal Manager",
   "two_factor_auth": 0
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Role",
+  "home_page": null,
+  "is_custom": 0,
+  "modified": "2026-05-02 12:42:45.976002",
+  "name": "Finance Head",
+  "restrict_to_domain": null,
+  "role_name": "Finance Head",
+  "two_factor_auth": 0
+ },
+ {
+  "desk_access": 1,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Role",
+  "home_page": null,
+  "is_custom": 0,
+  "modified": "2026-05-02 12:42:54.487047",
+  "name": "CEO",
+  "restrict_to_domain": null,
+  "role_name": "CEO",
+  "two_factor_auth": 0
  }
 ]
