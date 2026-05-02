@@ -123,13 +123,13 @@
   "doctype_event": "Before Save",
   "enable_rate_limit": 0,
   "event_frequency": "All",
-  "modified": "2026-05-02 12:57:09.887940",
+  "modified": "2026-05-02 15:50:34.309110",
   "module": "Payroll App",
   "name": "Generate Payroll Employees",
   "rate_limit_count": 5,
   "rate_limit_seconds": 86400,
   "reference_doctype": "Monthly Payroll Run",
-  "script": "# Only auto-generate if employee_details is empty\r\nif not doc.employee_details:\r\n    # Validate attendance is finalised\r\n    if not doc.attendance_finalised:\r\n        frappe.throw(\"Please finalise attendance before generating payroll.\", title=\"Attendance Not Finalised\")\r\n\r\n    # Get all active employees\r\n    employees = frappe.get_all(\r\n        \"Employee\",\r\n        filters={\"status\": \"Active\"},\r\n        fields=[\"name\", \"employee_name\", \"department\"]\r\n    )\r\n\r\n    total_net = 0\r\n    for emp in employees:\r\n        # Basic salary assumption - in real world fetch from Salary Structure\r\n        basic = 30000\r\n        hra = basic * 0.4\r\n        pf = basic * 0.12\r\n\r\n        # Simulate attendance - present 26 days, absent 0, lwp 0\r\n        present_days = 26\r\n        absent_days = 0\r\n        lwp_days = 0\r\n\r\n        # LWP deduction\r\n        per_day = basic / 26\r\n        lwp_deduction = per_day * lwp_days\r\n\r\n        # Net payable\r\n        net_payable = basic + hra - pf - lwp_deduction\r\n        total_net += net_payable\r\n\r\n        doc.append(\"employee_details\", {\r\n            \"employee\": emp.name,\r\n            \"employee_name\": emp.employee_name,\r\n            \"department\": emp.department,\r\n            \"present_days\": present_days,\r\n            \"absent_days\": absent_days,\r\n            \"lwp_days\": lwp_days,\r\n            \"basic\": basic,\r\n            \"hra\": hra,\r\n            \"pf_deduction\": pf,\r\n            \"lwp_deduction\": lwp_deduction,\r\n            \"net_payable\": net_payable,\r\n            \"status\": \"Pending\"\r\n        })\r\n\r\n    doc.total_employees = len(employees)\r\n    doc.total_net_payable = total_net",
+  "script": "if not doc.employee_details:\r\n    if not doc.attendance_finalised:\r\n        frappe.throw(\"Please finalise attendance before generating payroll.\", title=\"Attendance Not Finalised\")\r\n\r\n    employees = frappe.get_all(\r\n        \"Employee\",\r\n        filters={\"status\": \"Active\"},\r\n        fields=[\"name\", \"employee_name\", \"department\", \"monthly_basic_salary\"]\r\n    )\r\n\r\n    total_net = 0\r\n    for emp in employees:\r\n        # Fetch individual salary - default to 30000 if not set\r\n        basic = emp.monthly_basic_salary or 30000\r\n        hra = basic * 0.4\r\n        pf = basic * 0.12\r\n\r\n        present_days = 26\r\n        absent_days = 0\r\n        lwp_days = 0\r\n\r\n        per_day = basic / 26\r\n        lwp_deduction = per_day * lwp_days\r\n\r\n        net_payable = basic + hra - pf - lwp_deduction\r\n        total_net += net_payable\r\n\r\n        doc.append(\"employee_details\", {\r\n            \"employee\": emp.name,\r\n            \"employee_name\": emp.employee_name,\r\n            \"department\": emp.department,\r\n            \"present_days\": present_days,\r\n            \"absent_days\": absent_days,\r\n            \"lwp_days\": lwp_days,\r\n            \"basic\": basic,\r\n            \"hra\": hra,\r\n            \"pf_deduction\": pf,\r\n            \"lwp_deduction\": lwp_deduction,\r\n            \"net_payable\": net_payable,\r\n            \"status\": \"Pending\"\r\n        })\r\n\r\n    doc.total_employees = len(employees)\r\n    doc.total_net_payable = total_net",
   "script_type": "DocType Event"
  },
  {
@@ -150,5 +150,24 @@
   "reference_doctype": null,
   "script": "from frappe.utils import nowdate\r\nimport datetime\r\n\r\ntoday = datetime.datetime.now()\r\n\r\n# Only run on 25th of every month\r\nif today.day != 25:\r\n    pass\r\nelse:\r\n    month_names = {\r\n        1: \"January\", 2: \"February\", 3: \"March\", 4: \"April\",\r\n        5: \"May\", 6: \"June\", 7: \"July\", 8: \"August\",\r\n        9: \"September\", 10: \"October\", 11: \"November\", 12: \"December\"\r\n    }\r\n    \r\n    month = month_names[today.month]\r\n    year = today.year\r\n\r\n    # Check if payroll run already exists for this month\r\n    existing = frappe.db.exists(\"Monthly Payroll Run\", {\r\n        \"month\": month,\r\n        \"year\": year\r\n    })\r\n\r\n    if not existing:\r\n        # Create new payroll run\r\n        doc = frappe.new_doc(\"Monthly Payroll Run\")\r\n        doc.month = month\r\n        doc.year = year\r\n        doc.status = \"Draft\"\r\n        doc.attendance_finalised = 0\r\n        doc.insert(ignore_permissions=True)\r\n        frappe.db.commit()\r\n\r\n        # Notify HR Manager\r\n        hr_users = frappe.get_all(\r\n            \"Has Role\",\r\n            filters={\"role\": \"HR Manager\", \"parenttype\": \"User\"},\r\n            fields=[\"parent\"]\r\n        )\r\n\r\n        for user in hr_users:\r\n            email = frappe.db.get_value(\"User\", user.parent, \"email\")\r\n            if email:\r\n                frappe.sendmail(\r\n                    recipients=[email],\r\n                    subject=f\"Payroll Run Initiated - {month} {year}\",\r\n                    message=f\"\"\"Dear HR Manager,\r\n\r\nThe monthly payroll run for {month} {year} has been automatically initiated.\r\n\r\nPlease finalise attendance and generate the employee payroll list.\r\n\r\nBest Regards,\r\nAtrina Technologies\r\n\"\"\"\r\n                )\r\n\r\n    frappe.logger().info(f\"Auto payroll check completed for {month} {year}\")",
   "script_type": "Scheduler Event"
+ },
+ {
+  "allow_guest": 0,
+  "api_method": "send_salary_slips",
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Insert",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2026-05-02 18:12:45.643417",
+  "module": "Payroll App",
+  "name": "Send Salary Slip Emails",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": null,
+  "script": "dt = frappe.form_dict.get(\"dt\")\r\ndn = frappe.form_dict.get(\"dn\")\r\ndoc = frappe.get_doc(dt, dn)\r\n\r\nsent = 0\r\nfor emp in doc.employee_details:\r\n    emp_email = frappe.db.get_value(\"Employee\", emp.employee, \"email\")\r\n    \r\n    if emp_email:\r\n        frappe.sendmail(\r\n            recipients=[emp_email],\r\n            subject=f\"Salary Slip - {doc.month} {doc.year}\",\r\n            message=f\"\"\"Dear {emp.employee_name},<br><br>\r\nYour salary for <b>{doc.month} {doc.year}</b> has been processed and approved.<br><br>\r\n<table border=\"1\" cellpadding=\"8\" cellspacing=\"0\">\r\n<tr><td><b>Component</b></td><td><b>Amount</b></td></tr>\r\n<tr><td>Basic Salary</td><td>₹{emp.basic:,.2f}</td></tr>\r\n<tr><td>HRA (40%)</td><td>₹{emp.hra:,.2f}</td></tr>\r\n<tr><td>PF Deduction (12%)</td><td>- ₹{emp.pf_deduction:,.2f}</td></tr>\r\n<tr><td>LWP Deduction</td><td>- ₹{emp.lwp_deduction:,.2f}</td></tr>\r\n<tr><td><b>Net Payable</b></td><td><b>₹{emp.net_payable:,.2f}</b></td></tr>\r\n</table><br>\r\nPresent Days: {emp.present_days} | Absent Days: {emp.absent_days}<br><br>\r\nRegards,<br>HR Team - Atrina Technologies\"\"\"\r\n        )\r\n        sent += 1\r\n\r\nfrappe.response[\"message\"] = f\"Salary slips sent to {sent} employees\"",
+  "script_type": "API"
  }
 ]

@@ -86,15 +86,15 @@
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
-  "modified": "2026-04-12 23:52:59.501584",
-  "name": "Approve",
-  "workflow_action_name": "Approve"
+  "modified": "2026-04-12 23:52:59.505112",
+  "name": "Reject",
+  "workflow_action_name": "Reject"
  },
  {
   "docstatus": 0,
   "doctype": "Workflow Action Master",
-  "modified": "2026-04-12 23:52:59.505112",
-  "name": "Reject",
-  "workflow_action_name": "Reject"
+  "modified": "2026-04-12 23:52:59.501584",
+  "name": "Approve",
+  "workflow_action_name": "Approve"
  }
 ]
