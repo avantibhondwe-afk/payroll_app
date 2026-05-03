@@ -11,196 +11,212 @@ def send_salary_slips(dt, dn):
             per_day = emp.basic / 26
             total_earnings = emp.basic + emp.hra
             total_deductions = emp.pf_deduction + emp.lwp_deduction
-            html = f"""<!DOCTYPE html>
+
+            html = """<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <style>
-  body { font-family: Arial, sans-serif; font-size: 13px; color: #222; margin: 0; padding: 0; }
-  .slip { max-width: 780px; margin: 0 auto; padding: 32px; border: 1px solid #ddd; }
-  .header { display: flex; align-items: center; gap: 18px; background: #1a3c6e; padding: 20px 24px; border-radius: 6px; margin-bottom: 20px; }
-  .header img { height: 56px; width: auto; }
-  .header-text .company { font-size: 20px; font-weight: bold; color: #fff; }
-  .header-text .address { font-size: 11px; color: #b0c4de; margin-top: 3px; }
-  .header-text .payslip-for { font-size: 13px; color: #fff; margin-top: 6px; }
-  .badge { display: inline-block; background: #fff; color: #1a3c6e; font-size: 11px; font-weight: bold; padding: 3px 10px; border-radius: 12px; margin-top: 6px; }
-  .divider { border: none; border-top: 2px solid #1a3c6e; margin: 16px 0; }
-  .info-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-  .info-table td { padding: 6px 10px; font-size: 13px; }
-  .info-table .label { color: #555; width: 22%; }
-  .info-table .colon { width: 2%; color: #555; }
-  .info-table .value { font-weight: 600; color: #111; width: 26%; }
-  .section-title { background: #1a3c6e; color: #fff; padding: 8px 14px; font-size: 13px; font-weight: bold; border-radius: 4px 4px 0 0; margin-top: 16px; }
-  .attend-box { display: flex; gap: 12px; margin: 12px 0; }
-  .attend-card { flex: 1; background: #f0f5ff; border: 1px solid #b0c4de; border-radius: 6px; padding: 10px 14px; text-align: center; }
-  .attend-card .num { font-size: 22px; font-weight: bold; color: #1a3c6e; }
-  .attend-card .lbl { font-size: 11px; color: #555; margin-top: 2px; }
-  .earn-ded { width: 100%; border-collapse: collapse; margin-top: 0; }
-  .earn-ded thead tr th { background: #1a3c6e; color: #fff; padding: 10px 14px; font-size: 13px; text-align: left; width: 25%; }
-  .earn-ded tbody td { padding: 9px 14px; border-bottom: 1px solid #eee; width: 25%; }
-  .earn-ded tbody tr:nth-child(even) td { background: #f7faff; }
-  .total-row td { background: #e8f0fe !important; border-top: 2px solid #1a3c6e; font-weight: bold; padding: 10px 14px; }
-  .net-row td { background: #1a3c6e; color: #fff; padding: 12px 14px; font-size: 15px; font-weight: bold; }
-  .footer-table { width: 100%; margin-top: 24px; }
-  .footer-table td { width: 33%; vertical-align: bottom; padding: 4px 8px; }
-  .footer-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-  .footer-val { font-size: 13px; font-weight: bold; margin-top: 3px; color: #1a3c6e; }
-  .sig-line { font-size: 15px; margin-top: 28px; color: #aaa; }
-  .slip-note { text-align: center; font-size: 11px; color: #aaa; font-style: italic; margin-top: 20px; padding-top: 12px; border-top: 1px solid #eee; }
-  .summary-cards { display: flex; gap: 12px; margin: 16px 0; }
-  .summary-card { flex: 1; border-radius: 6px; padding: 12px 14px; text-align: center; }
-  .summary-card.earning { background: #e8f5e9; border: 1px solid #a5d6a7; }
-  .summary-card.deduction { background: #fff3e0; border: 1px solid #ffcc80; }
-  .summary-card.net { background: #1a3c6e; border: 1px solid #1a3c6e; }
-  .summary-card .amt { font-size: 18px; font-weight: bold; }
-  .summary-card.earning .amt { color: #2e7d32; }
-  .summary-card.deduction .amt { color: #e65100; }
-  .summary-card.net .amt { color: #fff; }
-  .summary-card .slbl { font-size: 11px; margin-top: 3px; }
-  .summary-card.earning .slbl { color: #555; }
-  .summary-card.deduction .slbl { color: #555; }
-  .summary-card.net .slbl { color: #b0c4de; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Arial, sans-serif; font-size: 12px; color: #333; background: #fff; }
+  .page { width: 750px; margin: 0 auto; padding: 30px; }
+  .company-header { border-bottom: 3px solid #1a3c6e; padding-bottom: 16px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .company-name { font-size: 20px; font-weight: bold; color: #1a3c6e; }
+  .company-address { font-size: 10px; color: #666; margin-top: 4px; line-height: 1.5; }
+  .slip-title { text-align: right; }
+  .slip-title h2 { font-size: 15px; color: #1a3c6e; font-weight: bold; }
+  .slip-title p { font-size: 11px; color: #666; margin-top: 3px; }
+  .confidential { display: inline-block; border: 1px solid #1a3c6e; color: #1a3c6e; font-size: 9px; padding: 2px 8px; border-radius: 3px; margin-top: 4px; letter-spacing: 1px; }
+  .info-section { background: #f5f7fa; border: 1px solid #dde3ed; border-radius: 4px; padding: 12px 16px; margin-bottom: 16px; }
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .info-item { display: flex; flex-direction: column; }
+  .info-label { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .info-value { font-size: 12px; font-weight: bold; color: #222; }
+  .attend-section { margin-bottom: 16px; }
+  .section-heading { font-size: 11px; font-weight: bold; color: #1a3c6e; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #dde3ed; padding-bottom: 5px; margin-bottom: 10px; }
+  .attend-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .attend-card { border: 1px solid #dde3ed; border-radius: 4px; padding: 8px 12px; text-align: center; }
+  .attend-num { font-size: 18px; font-weight: bold; color: #1a3c6e; }
+  .attend-lbl { font-size: 9px; color: #888; margin-top: 2px; }
+  .salary-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .salary-table th { background: #1a3c6e; color: #fff; padding: 8px 12px; text-align: left; font-size: 11px; }
+  .salary-table td { padding: 7px 12px; border-bottom: 1px solid #eee; font-size: 11px; }
+  .salary-table tr:nth-child(even) td { background: #f9fafb; }
+  .salary-table .amount { text-align: right; }
+  .salary-table .deduction { color: #c0392b; }
+  .total-row td { background: #edf2f7 !important; font-weight: bold; border-top: 2px solid #1a3c6e; }
+  .net-row td { background: #1a3c6e !important; color: #fff !important; font-weight: bold; font-size: 13px; }
+  .footer-section { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 24px; padding-top: 16px; border-top: 1px solid #dde3ed; }
+  .sig-block { display: flex; flex-direction: column; }
+  .sig-line { border-bottom: 1px solid #333; margin-bottom: 5px; height: 30px; }
+  .sig-label { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .note { text-align: center; font-size: 9px; color: #aaa; margin-top: 16px; font-style: italic; border-top: 1px solid #eee; padding-top: 10px; }
 </style>
 </head>
 <body>
-<div class="slip">
-  <div class="header">
-    <img src="file:///home/frappe/frappe-bench/sites/frontend/public/files/LOGO.png">
-    <div class="header-text">
-      <div class="company">Atrina Technologies Pvt Ltd</div>
-      <div class="address">C Wing, KAILASH BUSINESS PARK, P2, Park Site Rd, HMPL Surya Nagar, Vikhroli West, Mumbai 400079</div>
-      <div class="payslip-for">Pay Slip for {doc.month} {doc.year}</div>
-      <div class="badge">CONFIDENTIAL</div>
+<div class="page">
+
+  <div class="company-header">
+    <div>
+      <div class="company-name">Atrina Technologies Pvt Ltd</div>
+      <div class="company-address">C Wing, KAILASH BUSINESS PARK, P2, Park Site Rd,<br>HMPL Surya Nagar, Vikhroli West, Mumbai, Maharashtra 400079<br>CIN: U72900MH2020PTC123456 | PAN: AABCA1234Z</div>
+    </div>
+    <div class="slip-title">
+      <h2>SALARY SLIP</h2>
+      <p>Salary Slip</p>
+      <span class="confidential">CONFIDENTIAL</span>
     </div>
   </div>
 
-  <div class="section-title">Employee Details</div>
-  <table class="info-table">
-    <tr>
-      <td class="label">Employee Name</td><td class="colon">:</td>
-      <td class="value"><b>{emp.employee_name}</b></td>
-      <td class="label">Month</td><td class="colon">:</td>
-      <td class="value"><b>{doc.month} {doc.year}</b></td>
-    </tr>
-    <tr>
-      <td class="label">Department</td><td class="colon">:</td>
-      <td class="value">{emp.department}</td>
-      <td class="label">Date of Generation</td><td class="colon">:</td>
-      <td class="value">{frappe.utils.nowdate()}</td>
-    </tr>
-    <tr>
-      <td class="label">Status</td><td class="colon">:</td>
-      <td class="value" style="color:#1a3c6e;"><b>Paid</b></td>
-      <td class="label">Per Day Salary</td><td class="colon">:</td>
-      <td class="value">₹{per_day:,.2f}</td>
-    </tr>
-  </table>
-
-  <div class="section-title" style="margin-top:16px;">Attendance Summary</div>
-  <div class="attend-box">
-    <div class="attend-card">
-      <div class="num">26</div>
-      <div class="lbl">Total Working Days</div>
-    </div>
-    <div class="attend-card">
-      <div class="num">{emp.present_days}</div>
-      <div class="lbl">Present Days</div>
-    </div>
-    <div class="attend-card">
-      <div class="num">{emp.absent_days}</div>
-      <div class="lbl">Absent Days</div>
-    </div>
-    <div class="attend-card">
-      <div class="num">{emp.lwp_days}</div>
-      <div class="lbl">LWP Days</div>
+  <div class="info-section">
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Employee Name</span>
+        <span class="info-value">EMPNAME</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Department</span>
+        <span class="info-value">DEPT</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Pay Period</span>
+        <span class="info-value">MONTH YEAR</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Date of Generation</span>
+        <span class="info-value">TODAY</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Payment Status</span>
+        <span class="info-value" style="color:#1a7a4a;">Paid</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Per Day Salary</span>
+        <span class="info-value">Rs PERDAY</span>
+      </div>
     </div>
   </div>
 
-  <div class="summary-cards">
-    <div class="summary-card earning">
-      <div class="amt">₹{total_earnings:,.2f}</div>
-      <div class="slbl">Total Earnings</div>
-    </div>
-    <div class="summary-card deduction">
-      <div class="amt">₹{total_deductions:,.2f}</div>
-      <div class="slbl">Total Deductions</div>
-    </div>
-    <div class="summary-card net">
-      <div class="amt">₹{emp.net_payable:,.2f}</div>
-      <div class="slbl">Net Payable</div>
+  <div class="attend-section">
+    <div class="section-heading">Attendance Summary</div>
+    <div class="attend-grid">
+      <div class="attend-card">
+        <div class="attend-num">26</div>
+        <div class="attend-lbl">Working Days</div>
+      </div>
+      <div class="attend-card">
+        <div class="attend-num">PRESENT</div>
+        <div class="attend-lbl">Days Present</div>
+      </div>
+      <div class="attend-card">
+        <div class="attend-num">ABSENT</div>
+        <div class="attend-lbl">Days Absent</div>
+      </div>
+      <div class="attend-card">
+        <div class="attend-num">LWP</div>
+        <div class="attend-lbl">LWP Days</div>
+      </div>
     </div>
   </div>
 
-  <div class="section-title">Salary Breakdown</div>
-  <table class="earn-ded">
+  <div class="section-heading">Earnings and Deductions</div>
+  <table class="salary-table">
     <thead>
       <tr>
-        <th colspan="2">Earnings</th>
-        <th colspan="2">Deductions</th>
+        <th style="width:40%;">Component</th>
+        <th style="width:20%;">Type</th>
+        <th style="width:20%; text-align:right;">Amount (Rs)</th>
+        <th style="width:20%; text-align:right;">YTD (Rs)</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>Basic Salary</td>
-        <td>₹{emp.basic:,.2f}</td>
-        <td>PF Deduction (12%)</td>
-        <td>₹{emp.pf_deduction:,.2f}</td>
+        <td>Earning</td>
+        <td class="amount">BASIC</td>
+        <td class="amount">BASIC</td>
       </tr>
       <tr>
-        <td>HRA (40%)</td>
-        <td>₹{emp.hra:,.2f}</td>
-        <td>LWP Deduction</td>
-        <td>₹{emp.lwp_deduction:,.2f}</td>
+        <td>House Rent Allowance (40%)</td>
+        <td>Earning</td>
+        <td class="amount">HRAAMT</td>
+        <td class="amount">HRAAMT</td>
+      </tr>
+      <tr>
+        <td>Provident Fund (PF) - 12%</td>
+        <td>Deduction</td>
+        <td class="amount deduction">- PFDED</td>
+        <td class="amount deduction">- PFDED</td>
+      </tr>
+      <tr>
+        <td>Loss of Pay (LOP) Deduction</td>
+        <td>Deduction</td>
+        <td class="amount deduction">- LWPDED</td>
+        <td class="amount deduction">- LWPDED</td>
       </tr>
       <tr class="total-row">
-        <td><b>Total Earnings</b></td>
-        <td><b>₹{total_earnings:,.2f}</b></td>
-        <td><b>Total Deductions</b></td>
-        <td><b>₹{total_deductions:,.2f}</b></td>
+        <td colspan="2">Net Payable</td>
+        <td class="amount">NETPAY</td>
+        <td class="amount">NETPAY</td>
       </tr>
     </tbody>
-    <tfoot>
-      <tr class="net-row">
-        <td colspan="3" style="text-align:right;">Net Salary</td>
-        <td>₹{emp.net_payable:,.2f}</td>
-      </tr>
-    </tfoot>
   </table>
 
-  <hr class="divider">
-  <table class="footer-table">
-    <tr>
-      <td>
-        <div class="footer-label">Generated By</div>
-        <div class="footer-val">HR Team - Atrina Technologies</div>
-      </td>
-      <td style="text-align:center;">
-        <div class="footer-label">Employee Signature</div>
-        <div class="sig-line">_______________________</div>
-      </td>
-      <td style="text-align:right;">
-        <div class="footer-label">Authorized Signature</div>
-        <div class="sig-line">_______________________</div>
-      </td>
-    </tr>
-  </table>
-  <div class="slip-note">This is a computer generated payslip and does not require a physical signature.</div>
+  <div style="background:#f5f7fa; border:1px solid #dde3ed; border-radius:4px; padding:12px 16px; margin-bottom:16px;">
+    <div style="font-size:9px; color:#888; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px;">Net Salary Payable in Words</div>
+    <div style="font-size:12px; font-weight:bold; color:#1a3c6e;">NETWORDS Only</div>
+  </div>
+
+  <div class="footer-section">
+    <div class="sig-block">
+      <div class="sig-line"></div>
+      <div class="sig-label">Employee Signature</div>
+    </div>
+    <div class="sig-block">
+      <div class="sig-line"></div>
+      <div class="sig-label">HR Manager</div>
+    </div>
+    <div class="sig-block">
+      <div class="sig-line"></div>
+      <div class="sig-label">Authorized Signatory</div>
+    </div>
+  </div>
+
+  <div class="note">
+    This is a system-generated salary slip and does not require a physical signature. | Atrina Technologies Pvt Ltd | Confidential
+  </div>
+
 </div>
 </body>
 </html>"""
+
+            html = html.replace("EMPNAME", emp.employee_name)
+            html = html.replace("MONTH", doc.month)
+            html = html.replace("YEAR", str(doc.year))
+            html = html.replace("DEPT", emp.department or "")
+            html = html.replace("TODAY", frappe.utils.nowdate())
+            html = html.replace("PERDAY", "{:,.2f}".format(per_day))
+            html = html.replace("PRESENT", str(int(emp.present_days)))
+            html = html.replace("ABSENT", str(int(emp.absent_days)))
+            html = html.replace("LWP", str(int(emp.lwp_days)))
+            html = html.replace("BASIC", "{:,.2f}".format(emp.basic))
+            html = html.replace("HRAAMT", "{:,.2f}".format(emp.hra))
+            html = html.replace("PFDED", "{:,.2f}".format(emp.pf_deduction))
+            html = html.replace("LWPDED", "{:,.2f}".format(emp.lwp_deduction))
+            html = html.replace("NETPAY", "{:,.2f}".format(emp.net_payable))
+            html = html.replace("Salary Slip", "Payslip for " + doc.month + " " + str(doc.year))
+            html = html.replace("NETWORDS", "Rupees " + str(int(emp.net_payable)))
+
             pdf = frappe.utils.pdf.get_pdf(html, options={"enable-local-file-access": ""})
             frappe.sendmail(
                 recipients=[emp_email],
-                subject=f"Salary Slip - {doc.month} {doc.year} | Atrina Technologies",
-                message=f"""Dear {emp.employee_name},<br><br>
-Please find attached your salary slip for <b>{doc.month} {doc.year}</b>.<br><br>
-Regards,<br>
-HR Team - Atrina Technologies""",
+                subject="Salary Slip - " + doc.month + " " + str(doc.year) + " | Atrina Technologies",
+                message="Dear " + emp.employee_name + ",<br><br>Please find attached your salary slip for <b>" + doc.month + " " + str(doc.year) + "</b>.<br><br>Regards,<br>HR Team - Atrina Technologies",
                 attachments=[{
-                    "fname": f"Salary_Slip_{emp.employee_name}_{doc.month}_{doc.year}.pdf",
+                    "fname": "Salary_Slip_" + emp.employee_name + "_" + doc.month + "_" + str(doc.year) + ".pdf",
                     "fcontent": pdf
                 }]
             )
             sent += 1
     frappe.db.commit()
-    return f"Salary slips sent to {sent} employees"
+    return "Salary slips sent to " + str(sent) + " employees"
